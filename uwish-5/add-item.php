@@ -7,7 +7,7 @@ if (isset($_POST['name']) && !empty($_POST['name'])) {
   }
   $list = json_decode(file_get_contents('users-list.json'));
   $list[] = $item;
-  file_put_contents(json_encode($list));
+  file_put_contents('users-list.json', json_encode($list));
 
   header('Content-type: application/json');
   echo json_encode($item);

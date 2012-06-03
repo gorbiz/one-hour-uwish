@@ -30,7 +30,7 @@
                 });
             }
             
-            $("#add-item").submit(function(event) {
+            $("#add-item").live('submit', function(event) {
                 event.preventDefault();
                 var name = $(this).find("input[name='name']").val();
                 var description = $(this).find("input[name='description']").val();
@@ -50,13 +50,31 @@
             });
         });
         
+        $(".delete-item").live('click', function(event) {
+            event.preventDefault();
+            var item_id = $(this).closest('li').attr("id").split('-')[1];
+            /*$.ajax({
+                type: 'DELETE',
+                url: 'delete-item.php',
+                data: ...,
+                success: function(item) {
+                },
+                error: function() {
+                    // TODO Error handling
+                }
+            });*/
+
+            return false;
+        });
+        
         function make_list_item(item) {
-            return '<li>'
+            // FIXME This appears to break when adding items with "'" in them
+            return '<li id="item-' + item.id + '">'
                     + '  <a href="#edit-TODO">'
                     + '    <h3>' + item.name + '</h3>'
                     + '    <p>' + item.description + '</p>'
                     + '  </a>'
-                    + '  <a href="#delete-TODO">Delete</a>'
+                    + '  <a href="#delete-TODO" class="delete-item">Delete</a>'
                     + '</li>';
         }
         
