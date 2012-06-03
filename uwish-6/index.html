@@ -28,7 +28,7 @@
                 });
             }
             
-            $("#add-item").live('submit', function(event) {
+            $("#add-item").submit(function(event) {
                 event.preventDefault();
                 var name = $(this).find("input[name='name']").val();
                 var description = $(this).find("input[name='description']").val();
@@ -37,9 +37,9 @@
                     url: 'add-item.php',
                     data: {name:name, description:description},
                     success: function(item) {
-                        if (item.length) {
-                            //console.log(make_list_item(item));
-                            //$("#my-wish-list").listview('refresh');
+                        if (item) {
+                            $("#my-wish-list").prepend(make_list_item(item));
+                            $("#my-wish-list").listview('refresh');
                         }
                     },
                     error: function(error) {
@@ -47,6 +47,21 @@
                     }
                 });
                 return false;
+            });
+            
+            $(".delete-item").live('click', function(event) {
+                var id = $(this).closest('li').attr('id').split('-')[1];
+                $.ajax({
+                    type: 'POST',
+                    url: 'delete-item.php',
+                    data: {id: id},
+                    success: function(response) {
+                        $("#item-" + id).remove();
+                    },
+                    error: function() {
+                        // TODO Handle errors
+                    }
+                });
             });
             
         });
@@ -57,7 +72,7 @@
                     + '    <h3>' + item.name + '</h3>'
                     + '    <p>' + item.description + '</p>'
                     + '</a>'
-                    + '<a href="#delete-placeholder">Delete</a>'
+                    + '<a href="#delete-placeholder" class="delete-item">Delete</a>'
                     + '</li>';
         }
     </script>
@@ -85,13 +100,6 @@
             </form>
 
             <ul data-role="listview" id="my-wish-list" style="margin-top:0; margin-bottom:0;" data-split-theme="d" data-split-icon="delete">
-                <li>
-                    <a href="#laql">
-                        <h3>Item Name</h3>
-                        <p>Description</p>
-                    </a>
-                    <a href="#delete-TODO">Delete</a>
-                </li>
             </ul>
         </div>
     </div>
