@@ -1,12 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" /> 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
     <title>uWish 5</title>
     
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
     <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if ($("#my-wish-list").length > 0) {
+                $.ajax({
+                    url: 'users-list.json',
+                    cache: false,
+                    dataType: 'json',
+                    success: function(items) {
+                        $("#my-wish-list").html('');
+                        items.map(function(item) {
+                            $("#my-wish-list").prepend(make_list_item(item));
+                        })
+                        $("#my-wish-list").listview('refresh');
+                    },
+                    error: function(e) {
+                        // TODO Error handling
+                    }
+                });
+            }
+        });
+        
+        function make_list_item(item) {
+            return '<li>'
+                    + '  <a href="#edit-TODO">'
+                    + '    <h3>' + item.name + '</h3>'
+                    + '    <p>' + item.description + '</p>'
+                    + '  </a>'
+                    + '  <a href="#delete-TODO">Delete</a>'
+                    + '</li>';
+        }
+        
+    </script>
 </head>
 
 <body>
@@ -22,7 +56,8 @@
             </div>
         </div>
         <div data-role="content">
-            [My List]
+            <ul data-role="listview" id="my-wish-list" data-split-theme="d" data-split-icon="delete">
+            </ul>
         </div>
     </div>
 
