@@ -8,9 +8,25 @@
     
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
     <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="https://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js"></script>
     <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+            
+            // User ! logged in get id/session
+            var user_id = $.cookie("user_id");
+            if (!user_id) {
+                $.ajax({
+                    url: 'get-user-id.php',
+                    success: function(id) {
+                        $.cookie("user_id", id, { expires: 365 });
+                    },
+                    error: function(error) {
+                        // TODO
+                    }
+                });
+            }
+
             if ($("#my-wish-list").length > 0) {
                 $.ajax({
                     url: 'users-list.json',
