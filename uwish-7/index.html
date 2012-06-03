@@ -28,6 +28,46 @@
                     }
                 });
             }
+            
+            $("#add-item").submit(function(event) {
+                event.preventDefault();
+                var name = $(this).find("input[name='name']").val();
+                var description = $(this).find("input[name='description']").val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'add-item.php',
+                    dataType: 'json',
+                    data: {name: name, description: description},
+                    success: function(item) {
+                        $("#my-wish-list").prepend(make_list_item(item));
+                        $("#my-wish-list").listview('refresh');
+                        $(event.target).find("input[name='name']").val('');
+                        $(event.target).find("input[name='description']").val('');
+                    },
+                    error: function (error) {
+                        // TODO
+                    }
+                });
+                return false;
+            });
+            
+            $(".delete-item").live('click', function() {
+                var id = $(this).closest('li').attr('id').split('-')[1];
+                $.ajax({
+                    type: 'POST',
+                    url: 'delete-item.php',
+                    data: {id: id},
+                    success: function(response) {
+                        if (response) {
+                            $('#item-' + id).remove();
+                        }
+                    },
+                    error: function(error) {
+                        // TODO
+                    }
+                });
+            });
+            
         });
         
         function make_list_item(item) {
@@ -57,9 +97,9 @@
         </div>
         <div data-role="content">
         
-            <form method="post">
+            <form method="post" id="add-item">
                 <input type="text" name="name" placeholder="What I want..." />
-                <input type="text" name="descriptionname" placeholder="description" />
+                <input type="text" name="description" placeholder="description" />
                 <input type="submit" value="Add" />
             </form>
 
