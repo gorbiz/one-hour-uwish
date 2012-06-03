@@ -9,6 +9,38 @@
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
     <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if ($("#my-wish-list").length > 0) {
+                $.ajax({
+                    url: 'users-list.json',
+                    cache: false,
+                    dataType: 'json',
+                    success: function(items) {
+                        $("#my-wish-list").html('');
+                        items.map(function(item) {
+                            $("#my-wish-list").prepend(make_list_item(item));
+                        });
+                        $("#my-wish-list").listview('refresh');
+                    },
+                    error: function(error) {
+                        // TODO
+                    }
+                });
+            }
+        });
+        
+        function make_list_item(item) {
+            return '<li id="item-' + item.id + '">'
+                    + '<a href="#edit-item-TODO">'
+                    + '<h3>' + item.name + '</h3>'
+                    + '<p>' + item.description + '</p>'
+                    + '</a>'
+                    + '<a href="#delete-item-TODO" class="delete-item">Delete</a>'
+                    + '</li>'
+            ;
+        }
+    </script> 
 </head>
 
 <body>
@@ -24,7 +56,15 @@
             </div>
         </div>
         <div data-role="content">
-            My List
+        
+            <form method="post">
+                <input type="text" name="name" placeholder="What I want..." />
+                <input type="text" name="descriptionname" placeholder="description" />
+                <input type="submit" value="Add" />
+            </form>
+
+            <ul data-role="listview" id="my-wish-list" style="margin-top:0; margin-bottom:0;" data-split-theme="d" data-split-icon="delete">
+            </ul>
         </div>
     </div>
 
