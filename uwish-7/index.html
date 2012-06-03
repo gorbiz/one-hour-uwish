@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>uWish 7</title>
+    
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+</head>
+
+<body>
+
+    <div data-role="page" id="my-list">
+        <div data-role="header" data-position="fixed" data-id="header">
+            <h1>uWish</h1>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#my-list" class="ui-btn-active ui-state-persist">My List</a></li>
+                    <li><a href="#friends">Friends</a></li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="content">
+            My List
+        </div>
+    </div>
+
+    <div data-role="page" id="friends">
+        <div data-role="header" data-position="fixed" data-id="header">
+            <h1>uWish</h1>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#my-list">My List</a></li>
+                    <li><a href="#friends" class="ui-btn-active ui-state-persist">Friends</a></li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="content">
+            Friends
+        </div>
+    </div>
+
+</body>
+</html> 
