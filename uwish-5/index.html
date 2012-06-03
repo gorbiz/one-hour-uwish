@@ -11,6 +11,7 @@
     <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+        
             if ($("#my-wish-list").length > 0) {
                 $.ajax({
                     url: 'users-list.json',
@@ -20,7 +21,7 @@
                         $("#my-wish-list").html('');
                         items.map(function(item) {
                             $("#my-wish-list").prepend(make_list_item(item));
-                        })
+                        });
                         $("#my-wish-list").listview('refresh');
                     },
                     error: function(e) {
@@ -28,6 +29,25 @@
                     }
                 });
             }
+            
+            $("#add-item").submit(function(event) {
+                event.preventDefault();
+                var name = $(this).find("input[name='name']").val();
+                var description = $(this).find("input[name='description']").val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'add-item.php',
+                    data: {name: name, description: description},
+                    success: function(item) {
+                        $("#my-wish-list").prepend(make_list_item(item));
+                        $("#my-wish-list").listview('refresh');
+                    },
+                    error: function() {
+                        // TODO Error handling
+                    }
+                });
+                return false;
+            });
         });
         
         function make_list_item(item) {
@@ -56,7 +76,13 @@
             </div>
         </div>
         <div data-role="content">
-            <ul data-role="listview" id="my-wish-list" data-split-theme="d" data-split-icon="delete">
+            <form method="post" id="add-item">
+                <input name="name" type="text" placeholder="What I want..." />
+                <input name="description" type="text" placeholder="Description" />
+                <input type="submit" value="Add to list" />
+            </form>
+
+            <ul data-role="listview" id="my-wish-list" style="margin-top:0; margin-bottom: 0;" data-split-theme="d" data-split-icon="delete">
             </ul>
         </div>
     </div>
