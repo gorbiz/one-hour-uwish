@@ -23,10 +23,32 @@
                         $("#my-wish-list").listview('refresh');
                     },
                     error: function(error) {
-                        // TODO Error handling
+                        // TODO Handle errors
                     }
                 });
             }
+            
+            $("#add-item").live('submit', function(event) {
+                event.preventDefault();
+                var name = $(this).find("input[name='name']").val();
+                var description = $(this).find("input[name='description']").val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'add-item.php',
+                    data: {name:name, description:description},
+                    success: function(item) {
+                        if (item.length) {
+                            //console.log(make_list_item(item));
+                            //$("#my-wish-list").listview('refresh');
+                        }
+                    },
+                    error: function(error) {
+                        // TODO Handle errors
+                    }
+                });
+                return false;
+            });
+            
         });
         
         function make_list_item(item) {
@@ -44,6 +66,7 @@
 <body>
 
     <div data-role="page" id="my-list">
+
         <div data-role="header" data-position="fixed" data-id="header">
             <h1>uWish</h1>
             <div data-role="navbar">
@@ -53,8 +76,15 @@
                 </ul>
             </div>
         </div>
+
         <div data-role="content">
-            <ul data-role="listview" id="my-wish-list" data-split-theme="d" data-split-icon="delete">
+            <form method="post" id="add-item">
+                <input name="name" type="text" data-mini="true" />
+                <input name="description" type="text" data-mini="true" />
+                <input type="submit" value="Add" data-mini="true" />
+            </form>
+
+            <ul data-role="listview" id="my-wish-list" style="margin-top:0; margin-bottom:0;" data-split-theme="d" data-split-icon="delete">
                 <li>
                     <a href="#laql">
                         <h3>Item Name</h3>
@@ -67,6 +97,7 @@
     </div>
 
     <div data-role="page" id="friends">
+
         <div data-role="header" data-position="fixed" data-id="header">
             <h1>uWish</h1>
             <div data-role="navbar">
@@ -76,6 +107,7 @@
                 </ul>
             </div>
         </div>
+
         <div data-role="content">
             Content - Friends
         </div>
