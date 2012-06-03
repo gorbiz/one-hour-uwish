@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>uWish 3</title>
+    
+    <meta charset="utf-8" /> 
+    <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0" >
+    
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // XXX Debug
+            if (false && $("#my-wish-list").length > 0) {
+                $.ajax({
+                    url: 'users-list.json',
+                    dataType: 'json',
+                    cache: false,
+                    success: function(items) {
+                        $("#my-wish-list").html('');
+                        for (var i = 0; i < items.length; i++) {
+                            $("#my-wish-list").append(''
+                                + '<li>'
+                                + '    <a href="#edit-item-TODO">'
+                                + '        <h3>' + items[i].name + '</h3>'
+                                + '        <p>' + items[i].description + '</p>'
+                                + '    </a>'
+                                + '    <a href="#delete-TODO">Delete</a>'
+                                + '</li>'
+                            );
+                        }
+                        $('#my-wish-list').listview('refresh');
+                    },
+                    error: function(error) {
+                        console.log('ERROR:');
+                        console.log(error);
+                    }
+                })
+            }
+            
+            $("#add-item").submit(function(e) {
+                e.preventDefault();
+                var name = $(this).find("input[name='name']").val();
+                var description = $(this).find("input[name='description']").val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'add-item.php',
+                    dataType: 'json',
+                    data: { name: name, description: description },
+                    success: function(item) {
+                        $("#my-wish-list").prepend(''
+                            + '<li>'
+                            + '    <a href="#edit-item-TODO">'
+                            + '        <h3>' + item.name + '</h3>'
+                            + '        <p>' + item.description + '</p>'
+                            + '    </a>'
+                            + '    <a href="#delete-TODO">Delete</a>'
+                            + '</li>'
+                        );
+                        $('#my-wish-list').listview('refresh');
+                    },
+                });
+                return false;
+            });
+        });
+    </script> 
+</head>
+
+<body>
+    <div data-role="page" id="my-list">
+        <div data-role="header" data-position="fixed" data-id="header">
+            <h1>uWish</h1>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#my-list" class="ui-btn-active ui-state-persist">My list</a></li>
+                    <li><a href="#friends">Friends</a></li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="content">
+            <div>
+                <form method="post" id="add-item">
+                    <input name="name" type="text" placeholder="I want..." data-mini="true" />
+                    <input name="description" type="text" placeholder="Description" data-mini="true" />
+                    <input name="save" type="submit" value="Add" data-mini="true" />
+                </form>
+            </div>
+            <ul data-role="listview" id="my-wish-list" style="margin-top:0;margin-bottom:0;" data-split-theme="d" data-split-icon="delete" >
+                <li>
+                    <a href="#edit-item-TODO">
+                        <h3>Broken Bells</h3>
+                        <p>Broken Bells</p>
+                    </a>
+                    <a href="#delete-TODO">Delete</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div data-role="page" id="friends">
+        <div data-role="header" data-position="fixed" data-id="header">
+            <h1>uWish</h1>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#my-list">My list</a></li>
+                    <li><a href="#friends" class="ui-btn-active ui-state-persist">Friends</a></li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="content">
+            Friends
+        </div>
+    </div>
+
+</body>
+</html> 
